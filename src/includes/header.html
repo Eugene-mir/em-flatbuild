@@ -1,0 +1,10 @@
+<header class="header">
+  <div class="header__container">
+    <a class="header__logo" href="/">{{icon "star" size="20"}} {{site.name}}</a>
+    <nav class="header__nav">
+      {{#each navigation}}
+        <a class="header__link" href="{{this.url}}">{{this.label}}</a>
+      {{/each}}
+    </nav>
+  </div>
+</header>

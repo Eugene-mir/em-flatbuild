@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{#if title}}{{title}} | {{/if}}{{site.name}}</title>
+  {{#if description}}<meta name="description" content="{{description}}">{{/if}}
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+  {{> header}}
+
+  <main class="main">
+    <article class="blog-post">
+      <div class="blog-post__container">
+        <div class="blog-post__header">
+          <a class="blog-post__back" href="/blogs.html">&larr; Back to blog</a>
+          {{#if date}}<time class="blog-post__date">{{date}}</time>{{/if}}
+        </div>
+
+        <div class="blog-post__content">
+          {{> body}}
+        </div>
+      </div>
+    </article>
+  </main>
+
+  {{> footer}}
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

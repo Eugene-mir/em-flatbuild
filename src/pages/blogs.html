@@ -1,0 +1,33 @@
+---
+title: Blog
+description: Latest articles, tutorials, and updates.
+layout: blogs
+paginate: blogs
+perPage: 10
+---
+
+<h1 class="blogs__title">Blog</h1>
+<p class="blogs__description">Latest articles, tutorials, and updates.</p>
+
+<div class="blogs__grid">
+  {{#each blogs}}
+    <a class="blog-card" href="{{this.url}}">
+      {{#if this.tags}}<span class="blog-card__tags">{{this.tags}}</span>{{/if}}
+      <h2 class="blog-card__title">{{this.title}}</h2>
+      {{#if this.date}}<time class="blog-card__date" datetime="{{this.date}}">{{this.date}}</time>{{/if}}
+      {{#if this.img}}<img src="{{this.img}}" alt="img">{{/if}}
+    </a>
+  {{/each}}
+</div>
+
+{{#gt pagination.totalPages 1}}
+<nav class="pagination" aria-label="Blog navigation">
+  {{#if pagination.prev}}
+    <a class="pagination__link pagination__link--prev" href="{{pagination.prev}}">← Previous</a>
+  {{/if}}
+  <span class="pagination__info">Page {{pagination.current}} of {{pagination.totalPages}}</span>
+  {{#if pagination.next}}
+    <a class="pagination__link pagination__link--next" href="{{pagination.next}}">Next →</a>
+  {{/if}}
+</nav>
+{{/gt}}

@@ -1,0 +1,52 @@
+{
+  "name": "em-flatbuild",
+  "version": "1.0.0",
+  "description": "A modern flat file generator with Handlebars, SCSS, and live reload",
+  "type": "module",
+  "bin": {
+    "em-flatbuild": "./bin/cli.js"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "scripts": {
+    "dev": "node bin/cli.js dev",
+    "build": "node bin/cli.js build",
+    "lint": "npm run lint:js && npm run lint:scss",
+    "lint:js": "eslint .",
+    "lint:scss": "stylelint \"src/**/*.scss\"",
+    "lint:fix": "eslint . --fix && stylelint \"src/**/*.scss\" --fix",
+    "format": "prettier --write \"**/*.{js,json,md,scss,html}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md,scss,html}\""
+  },
+  "keywords": [
+    "static-site",
+    "flat-file",
+    "handlebars",
+    "scss",
+    "generator",
+    "html",
+    "panini"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "browser-sync": "^3.0.0",
+    "chokidar": "^4.0.0",
+    "commander": "^13.0.0",
+    "fast-glob": "^3.3.0",
+    "gray-matter": "^4.0.0",
+    "handlebars": "^4.7.0",
+    "js-yaml": "^4.1.0",
+    "marked": "^17.0.2",
+    "sass": "^1.80.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
+    "prettier": "^3.8.1",
+    "stylelint": "^17.3.0",
+    "stylelint-config-standard-scss": "^17.0.0"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "selector-class-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+((-[a-z0-9]+)*)?)?(--[a-z0-9]+((-[a-z0-9]+)*)?)?$",
+      {
+        "message": "Class selector \"%s\" must follow BEM naming: block__element--modifier (lowercase, hyphens)"
+      }
+    ],
+    "scss/dollar-variable-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+    "scss/percent-placeholder-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+    "property-no-vendor-prefix": [true, { "ignoreProperties": ["-webkit-text-size-adjust", "-moz-text-size-adjust", "-webkit-font-smoothing"] }],
+    "declaration-empty-line-before": null,
+    "value-keyword-case": ["lower", { "ignoreFunctions": ["local"], "camelCaseSvgKeywords": true, "ignoreKeywords": ["BlinkMacSystemFont"] }],
+    "max-nesting-depth": [
+      4,
+      {
+        "ignoreAtRules": ["media", "supports", "include"],
+        "message": "Nesting depth exceeds 4 levels. Consider flattening."
+      }
+    ],
+    "selector-max-id": 0,
+    "selector-max-compound-selectors": 4,
+    "selector-no-qualifying-type": [
+      true,
+      {
+        "ignore": ["attribute"]
+      }
+    ],
+    "declaration-no-important": true,
+    "color-named": "never",
+    "color-no-hex": null,
+    "no-descending-specificity": true,
+    "shorthand-property-no-redundant-values": true,
+    "declaration-block-no-redundant-longhand-properties": true,
+    "font-family-name-quotes": "always-where-recommended",
+    "scss/at-mixin-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+    "scss/no-duplicate-mixins": true,
+    "rule-empty-line-before": [
+      "always-multi-line",
+      {
+        "except": ["first-nested"],
+        "ignore": ["after-comment"]
+      }
+    ],
+    "at-rule-empty-line-before": [
+      "always",
+      {
+        "except": ["first-nested", "blockless-after-blockless"],
+        "ignore": ["after-comment"],
+        "ignoreAtRules": ["else", "include", "import", "use", "forward"]
+      }
+    ]
+  },
+  "ignoreFiles": ["node_modules/**", "dist/**"]
+}

@@ -1,0 +1,420 @@
+---
+title: About em-Flatbuild
+description: A modern flat file generator for rapid website development
+tags: about, documentation
+---
+
+<section class="about">
+  <div class="about__container">
+    <div class="about__banner">
+      <img class="about__banner-image" src="/assets/images/about/em-flatbuild.jpg" alt="em-Flatbuild">
+    </div>
+    
+    <h1 class="about__title">em-Flatbuild</h1>
+    <p class="about__lead">
+      A modern flat file generator for rapid website development.
+      Inspired by <a href="https://github.com/foundation/panini" target="_blank" rel="noopener">Panini</a>, but standalone - no Gulp required.
+    </p>
+    
+    <div class="about__features">
+      <span class="about__feature">Handlebars templating</span>
+      <span class="about__feature">SCSS compilation</span>
+      <span class="about__feature">Markdown pages</span>
+      <span class="about__feature">Live reload dev server</span>
+    </div>
+
+    <div class="about__content">
+      <h2 class="about__subtitle">Quick Start</h2>
+<pre class="about__code"><code>
+npx em-flatbuild dev   # Start dev server with live reload
+npx em-flatbuild build --minify  # Build for production
+</code></pre>
+      <p class="about__text">
+        Place your source files in the <code>src/</code> directory, then run <code>dev</code> and open 
+        <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a>.
+      </p>
+
+      <h2 class="about__subtitle">Project Structure</h2>
+<pre class="about__code"><code>
+my-project/
+├── src/
+│   ├── pages/          # .html / .hbs / .md pages with front matter
+│   ├── layouts/        # Layout templates (default.html required)
+│   ├── includes/       # Reusable HTML fragments
+│   ├── helpers/        # Custom Handlebars helpers (.js)
+│   ├── data/           # Global data - JSON / YAML / JS
+│   ├── assets/         # Static files (JS, images, fonts)
+│   └── scss/           # SCSS stylesheets
+├── dist/               # Build output (generated)
+└── em-flatbuild.config.js # Configuration (optional)
+</code></pre>
+
+      <h2 class="about__subtitle">Pages</h2>
+      <p class="about__text">
+        Pages live in <code>src/pages/</code> and support <code>.html</code>, <code>.hbs</code>, 
+        <code>.handlebars</code>, and <code>.md</code> extensions. Every page can include YAML front matter at the top:
+      </p>
+<pre class="about__code"><code>
+---
+title: About Us
+layout: default
+customVar: hello
+---
+
+&lt;h1&gt;&#123;&#123;title&#125;&#125;&lt;/h1&gt;
+&lt;p&gt;&#123;&#123;customVar&#125;&#125;&lt;/p&gt;
+</code></pre>
+      <p class="about__text">
+        Front matter variables are available as Handlebars context inside the page and its layout.
+      </p>
+
+      <h3 class="about__subtitle about__subtitle--small">The page Object</h3>
+      <p class="about__text">Every page template receives a <code>page</code> object with metadata:</p>
+      <ul class="about__list">
+        <li class="about__list-item"><code>page.name</code> - filename without extension</li>
+        <li class="about__list-item"><code>page.path</code> - relative path</li>
+        <li class="about__list-item"><code>page.title</code> - from front matter</li>
+      </ul>
+
+      <h2 class="about__subtitle">Layouts</h2>
+      <p class="about__text">
+        Layouts define the outer HTML shell that wraps page content. Place them in <code>src/layouts/</code>.
+        Use the special partial to inject the page content.
+      </p>
+      <p class="about__text">
+        A layout named <code>default.html</code> is <strong>required</strong> - it's the fallback for all pages.
+        Create additional layouts (e.g. <code>blog-post.html</code>, <code>landing.html</code>) and reference them in front matter.
+      </p>
+
+      <h2 class="about__subtitle">Includes</h2>
+      <p class="about__text">
+        Reusable HTML fragments in <code>src/includes/</code>. Any <code>.html</code> or <code>.hbs</code> file 
+        is auto-registered as a Handlebars partial.
+      </p>
+<pre class="about__code"><code>
+src/includes/
+├── header.html
+├── footer.html
+└── cards/
+    └── product.html
+</code></pre>
+      <p class="about__text">
+        Nested files use forward-slash naming. Includes receive the same data context as the calling template.
+      </p>
+
+      <h2 class="about__subtitle">Data</h2>
+      <p class="about__text">
+        External data files in <code>src/data/</code> become <strong>global template variables</strong> 
+        available in every page, layout, and include.
+      </p>
+      <table class="about__table">
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>Example file</th>
+            <th>Template access</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>JSON</td>
+            <td><code>site.json</code></td>
+            <td><code>&#123;&#123;site.name&#125;&#125;</code></td>
+          </tr>
+          <tr>
+            <td>YAML</td>
+            <td><code>team.yml</code></td>
+            <td><code>&#123;&#123;#each team&#125;&#125;...&#123;&#123;/each&#125;&#125;</code></td>
+          </tr>
+          <tr>
+            <td>JavaScript</td>
+            <td><code>build.js</code></td>
+            <td><code>&#123;&#123;build.date&#125;&#125;</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="about__subtitle">Pagination</h2>
+      <p class="about__text">
+        Any list page can be split into multiple static HTML pages by adding two front matter keys: 
+        <code>paginate</code> and <code>perPage</code>.
+      </p>
+<pre class="about__code"><code>
+---
+title: Blog
+layout: blogs
+paginate: blogs
+perPage: 10
+---
+</code></pre>
+
+      <h3 class="about__subtitle about__subtitle--small">Output Structure</h3>
+      <p class="about__text">
+        Given <code>src/pages/blogs.html</code> with 25 items and <code>perPage: 10</code>, the build produces:
+      </p>
+<pre class="about__code"><code>
+dist/
+├── blogs.html        ← page 1
+├── blogs/
+│   ├── 2.html        ← page 2
+│   └── 3.html        ← page 3
+</code></pre>
+      <h3 class="about__subtitle about__subtitle--small">The pagination Object</h3>
+      <p class="about__text">Every paginated page receives a <code>pagination</code> object:</p>
+      <ul class="about__list">
+        <li class="about__list-item"><code>pagination.current</code> - Current page number (1-based)</li>
+        <li class="about__list-item"><code>pagination.total</code> - Total number of items</li>
+        <li class="about__list-item"><code>pagination.totalPages</code> - Total number of pages</li>
+        <li class="about__list-item"><code>pagination.perPage</code> - Items per page</li>
+        <li class="about__list-item"><code>pagination.prev</code> - URL of previous page or null</li>
+        <li class="about__list-item"><code>pagination.next</code> - URL of next page or null</li>
+      </ul>
+
+      <h2 class="about__subtitle">Markdown</h2>
+      
+      <h3 class="about__subtitle about__subtitle--small">Markdown Pages</h3>
+      <p class="about__text">
+        <code>.md</code> files in <code>src/pages/</code> are first-class citizens. Handlebars expressions 
+        are processed <strong>first</strong>, then the result is converted to HTML via 
+        <a href="https://github.com/markedjs/marked" target="_blank" rel="noopener">marked</a> and wrapped in the layout.
+      </p>
+      <p class="about__text">
+        The pipeline: <strong>Front matter parsed → Handlebars compiled → Markdown → HTML → Layout wrapped → Output</strong>.
+      </p>
+
+      <h3 class="about__subtitle about__subtitle--small">Markdown Helper</h3>
+      <p class="about__text">
+        Use the <code>markdown</code> helper to render markdown inside HTML pages in both block and inline modes.
+      </p>
+
+      <h2 class="about__subtitle">Helpers</h2>
+      
+      <h3 class="about__subtitle about__subtitle--small">Custom Helpers</h3>
+      <p class="about__text">
+        Place <code>.js</code> files in <code>src/helpers/</code>. Each file should export a single function 
+        (ESM <code>export default</code>). The filename becomes the helper name.
+      </p>
+<pre class="about__code"><code>
+// src/helpers/uppercase.js
+export default function (str) {
+  if (typeof str !== 'string') return '';
+  return str.toUpperCase();
+};
+</code></pre>
+      <h3 class="about__subtitle about__subtitle--small">Built-in Helpers</h3>
+      <table class="about__table">
+        <thead>
+          <tr>
+            <th>Helper</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>eq</code>, <code>neq</code>, <code>gt</code>, <code>lt</code></td>
+            <td>Block</td>
+            <td>Conditional comparisons</td>
+          </tr>
+          <tr>
+            <td><code>and</code>, <code>or</code></td>
+            <td>Block</td>
+            <td>Logical operators</td>
+          </tr>
+          <tr>
+            <td><code>repeat</code></td>
+            <td>Block</td>
+            <td>Repeat N times</td>
+          </tr>
+          <tr>
+            <td><code>markdown</code></td>
+            <td>Both</td>
+            <td>Markdown to HTML</td>
+          </tr>
+          <tr>
+            <td><code>icon</code></td>
+            <td>Inline</td>
+            <td>Inline SVG icon</td>
+          </tr>
+          <tr>
+            <td><code>join</code></td>
+            <td>Inline</td>
+            <td>Array to string</td>
+          </tr>
+          <tr>
+            <td><code>json</code></td>
+            <td>Inline</td>
+            <td>Pretty JSON</td>
+          </tr>
+          <tr>
+            <td><code>year</code></td>
+            <td>Inline</td>
+            <td>Current year</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="about__subtitle">Icons</h2>
+      <p class="about__text">
+        SVG icons placed in <code>src/assets/icons/</code> can be inlined directly into HTML using the 
+        <code>icon</code> helper. The SVG source is injected as raw HTML with semantic class names - 
+        no sprite sheets, no extra HTTP requests.
+      </p>
+      <p class="about__text">
+        Icons are also copied to <code>dist/assets/icons/</code> as static files, so they remain available via URL if needed.
+      </p>
+
+      <h2 class="about__subtitle">SCSS</h2>
+      <p class="about__text">
+        SCSS files in <code>src/scss/</code> are compiled to CSS automatically. Output goes to <code>dist/css/</code>.
+      </p>
+      <p class="about__text">
+        Files starting with <code>_</code> (partials) are <strong>not</strong> compiled as standalone - 
+        they're meant to be imported. Use <code>--minify</code> flag on build to get compressed output.
+      </p>
+<pre class="about__code"><code>
+src/scss/
+├── main.scss          →  dist/css/main.css
+├── _variables.scss    →  @import only
+└── _reset.scss        →  @import only
+</code></pre>
+
+      <h2 class="about__subtitle">Assets</h2>
+      <p class="about__text">
+        Static files in <code>src/assets/</code> are copied as-is to <code>dist/assets/</code>, 
+        preserving directory structure.
+      </p>
+<pre class="about__code"><code>
+src/assets/
+├── js/
+│   └── main.js        →  dist/assets/js/main.js
+├── images/
+│   └── logo.svg       →  dist/assets/images/logo.svg
+└── fonts/
+    └── inter.woff2    →  dist/assets/fonts/inter.woff2
+</code></pre>
+
+      <h2 class="about__subtitle">Linting</h2>
+      <p class="about__text">
+        The project includes linter configs tuned for BEM methodology:
+      </p>
+      <ul class="about__list">
+        <li class="about__list-item"><strong>ESLint</strong> - JavaScript linting (flat config, ESM)</li>
+        <li class="about__list-item"><strong>Stylelint</strong> - SCSS linting + BEM class naming</li>
+        <li class="about__list-item"><strong>Prettier</strong> - Code formatting (JS, SCSS, HTML, JSON, MD)</li>
+        <li class="about__list-item"><strong>EditorConfig</strong> - Consistent editor settings</li>
+      </ul>
+
+      <h2 class="about__subtitle">Configuration</h2>
+      <p class="about__text">
+        Create <code>em-flatbuild.config.js</code> in the project root. All options are optional:
+      </p>
+<pre class="about__code"><code>
+export default {
+  // Paths (relative to project root)
+  root: 'src/pages',
+  layouts: 'src/layouts',
+  includes: 'src/includes',
+  helpers: 'src/helpers',
+  data: 'src/data',
+  assets: 'src/assets',
+  scss: 'src/scss',
+  output: 'dist',
+
+  // Dev server
+  port: 3000,
+  open: false,       // Open browser on dev
+
+  // Auto-assign layouts by folder
+  pageLayouts: {
+    // 'blog': 'blog',
+    // 'docs': 'docs',
+  },
+};
+</code></pre>
+
+      <h2 class="about__subtitle">CLI Reference</h2>
+<pre class="about__code"><code>
+Usage: em-flatbuild &lt;command&gt; [options]
+Commands:
+  build [options]     Build the site for production
+  dev [options]       Start dev server with live reload
+
+Build options:
+  --minify            Minify CSS output
+
+Dev options:
+  -p, --port &lt;number&gt; Dev server port (default: 3000)
+  --open              Open browser on start
+
+General:
+  -V, --version       Show version number
+  -h, --help          Show help
+</code></pre>
+
+      <h3 class="about__subtitle about__subtitle--small">Examples</h3>
+<pre class="about__code"><code>
+# Dev server on custom port
+em-flatbuild dev -p 8080
+
+# Dev server, open browser
+em-flatbuild dev --open
+
+# Production build with minified CSS
+em-flatbuild build --minify
+</code></pre>
+
+      <h2 class="about__subtitle">Programmatic API</h2>
+      <p class="about__text">em-Flatbuild can also be used as a Node.js library:</p>
+<pre class="about__code"><code>
+import { resolveConfig, build, serve } from 'em-flatbuild';
+// Build
+const buildConfig = await resolveConfig(process.cwd(), { minify: true });
+const result = await build(buildConfig);
+console.log(`Built ${result.pages} pages in ${result.elapsed}ms`);
+
+// Dev server
+const devConfig = await resolveConfig();
+await serve(devConfig);
+</code></pre>
+
+      <h2 class="about__subtitle">Key Features</h2>
+      <ul class="about__list">
+        <li class="about__list-item">
+          <strong>Zero Configuration:</strong> Works out of the box with sensible defaults. 
+          Add config only when you need to customize.
+        </li>
+        <li class="about__list-item">
+          <strong>Fast Build Times:</strong> Optimized for speed. Build hundreds of pages in seconds.
+        </li>
+        <li class="about__list-item">
+          <strong>Developer-Friendly:</strong> Clean API, clear documentation, predictable behavior. 
+          Spend time building, not debugging tools.
+        </li>
+        <li class="about__list-item">
+          <strong>Production-Ready:</strong> Minification, optimization, and best practices built in. 
+          Deploy with confidence.
+        </li>
+        <li class="about__list-item">
+          <strong>BEM Methodology:</strong> Built-in linting support for BEM naming conventions.
+        </li>
+        <li class="about__list-item">
+          <strong>Flexible Data:</strong> Support for JSON, YAML, and JavaScript data files.
+        </li>
+      </ul>
+
+      <h2 class="about__subtitle">Who It's For</h2>
+      <p class="about__text">
+        em-Flatbuild is perfect for developers who need to build static websites quickly without the overhead 
+        of heavy frameworks. Whether you're creating marketing sites, landing pages, documentation, portfolios, 
+        or blogs - if it's content-driven and doesn't require a database, em-Flatbuild is an ideal choice.
+      </p>
+
+      <div class="about__footer">
+        <p class="about__text about__text--center">
+          <strong>License:</strong> MIT
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
